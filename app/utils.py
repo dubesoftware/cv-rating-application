@@ -1,6 +1,7 @@
 import os
 import convertapi
 from openai import OpenAI
+from werkzeug.utils import secure_filename
 
 # Instantiate OpenAI client
 client = OpenAI(api_key=os.environ.get('OPENAI_KEY'))
@@ -14,6 +15,10 @@ assistant = client.beta.assistants.create(
 # Create a vector store called "CVs"
 vector_store = client.beta.vector_stores.create(name="CVs")
 
+def save_file(file):
+    file_path = os.path.join('uploads', secure_filename(file.filename))
+    file.save(file_path) 
+    return file_path
 
 def convert_pdf_to_text(file_path):
     # Use ConvertAPI to convert PDF to text
