@@ -8,7 +8,7 @@
   display: flex;
 }
 
-.logo-image {
+.logo-icon {
   background-image: url('logo-blue.png');
   background-size: cover;
   height: 32px;
@@ -16,17 +16,17 @@
   width: 32px;
 }
 
-.logo-image:hover {
+.logo-icon:hover {
   background-image: url('logo-dark.png');
 }
 
-.logo-text {
+.wordmark {
   font-size: 0px;
   padding-left: 4px;
   vertical-align: middle;
 }
 
-.logo-text span{
+.wordmark span{
   color: #0a122e;
   display: inline-block;
   font-size: 22px;
@@ -36,11 +36,11 @@
   /* padding-top: 2px; */
 }
 
-.logo-text-left {
+.wordmark-left {
   font-weight: 600;
 }
 
-.logo-text-right {
+.wordmark-right {
   font-weight: 600;
   padding-left: 2px;
 }
