@@ -1,3 +1,50 @@
+.logo {
+  display: inline-block;
+  width: fit-content;
+}
+
+.logo-link {
+  align-items: center;
+  display: flex;
+}
+
+.logo-image {
+  background-image: url('logo-blue.png');
+  background-size: cover;
+  height: 32px;
+  transition: background-image 0.3s ease-in-out;
+  width: 32px;
+}
+
+.logo-image:hover {
+  background-image: url('logo-dark.png');
+}
+
+.logo-text {
+  font-size: 0px;
+  padding-left: 4px;
+  vertical-align: middle;
+}
+
+.logo-text span{
+  color: #303030;
+  display: inline-block;
+  font-size: 22px;
+  font-stretch: normal;
+  font-style: normal;
+  /* letter-spacing: -0.4px; */
+  /* padding-top: 2px; */
+}
+
+.logo-text-left {
+  font-weight: 600;
+}
+
+.logo-text-right {
+  font-weight: 600;
+  padding-left: 2px;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
