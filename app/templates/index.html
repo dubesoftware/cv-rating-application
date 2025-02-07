@@ -17,16 +17,21 @@
         </div>
         </a>
     </div>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".pdf">
-        <button type="submit">Upload CV</button>
-    </form>
     {% if feedback %}
-    <h2>Feedback:</h2>
-    <p>{{ feedback }}</p>
-    <a href="{{ url_for('index') }}">
-        <button type="button">Reset page</button>
-    </a>
+    <div>
+        <h2>Feedback:</h2>
+        <p>{{ feedback }}</p>
+        <a href="{{ url_for('index') }}">
+            <button type="button">Reset page</button>
+        </a>
+    </div>
+    {% else %}
+    <div>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".pdf">
+            <button type="submit">Upload CV</button>
+        </form>
+    </div>
     {% endif %}
 </body>
 </html>
