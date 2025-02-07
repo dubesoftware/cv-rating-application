@@ -27,7 +27,7 @@
 }
 
 .logo-text span{
-  color: #303030;
+  color: #0a122e;
   display: inline-block;
   font-size: 22px;
   font-stretch: normal;
@@ -48,6 +48,7 @@
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
+  color: #0a122e;
 }
 
 h1 {
