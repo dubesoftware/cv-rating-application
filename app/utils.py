@@ -4,12 +4,12 @@ import convertapi
 from openai import OpenAI
 
 # Instantiate OpenAI client
-client = OpenAI()
+client = OpenAI(api_key=os.environ.get('OPENAI_KEY'))
 
 
 def convert_pdf_to_text(file_path):
     # Use ConvertAPI to convert PDF to text
-    convertapi.api_credentials = 'secret_lRQkjhj9nFEPNunH'
+    convertapi.api_credentials = os.environ.get('CONVERTAPI_SECRET')
     convertapi.convert('txt', {
         'File': file_path
     }, from_format = 'pdf').save_files(os.path.join('uploads', 'converted.txt'))
