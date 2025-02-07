@@ -2,7 +2,6 @@ import os
 import requests
 import convertapi
 from openai import OpenAI
-from app import app
 
 # Instantiate OpenAI client
 client = OpenAI(api_key=os.environ.get('OPENAI_KEY'))
@@ -13,7 +12,7 @@ def convert_pdf_to_text(file_path):
     convertapi.api_credentials = os.environ.get('CONVERTAPI_SECRET')
     convertapi.convert('txt', {
         'File': file_path
-    }, from_format = 'pdf').save_files(os.path.join(os.path.join(app.instance_path, 'uploads', 'converted.txt')))
+    }, from_format = 'pdf').save_files(os.path.join('uploads', 'converted.txt'))
 
 def get_openai_feedback(text):
     # Create OpenAI assistant with file search enabled
