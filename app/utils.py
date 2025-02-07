@@ -1,8 +1,18 @@
 import os
 import convertapi
 from openai import OpenAI
+
 # Instantiate OpenAI client
 client = OpenAI(api_key=os.environ.get('OPENAI_KEY'))
+# Create OpenAI assistant with file search enabled
+assistant = client.beta.assistants.create(
+    name="CV Reviewer Assistant",
+    instructions="You are an expert CV reviewer. Use your knowledge of recruitment to provide feedback on a CV.",
+    model="gpt-4o",
+    tools=[{"type": "file_search"}],
+)
+# Create a vector store called "CVs"
+vector_store = client.beta.vector_stores.create(name="CVs")
 
 
 def convert_pdf_to_text(file_path):
@@ -13,15 +23,6 @@ def convert_pdf_to_text(file_path):
     }, from_format = 'pdf').save_files(os.path.join('converted', 'converted.txt'))
 
 def get_openai_feedback(text):
-    # Create OpenAI assistant with file search enabled
-    assistant = client.beta.assistants.create(
-        name="CV Reviewer Assistant",
-        instructions="You are an expert CV reviewer. Use your knowledge of recruitment to provide feedback on a CV.",
-        model="gpt-4o",
-        tools=[{"type": "file_search"}],
-    )
-    # Create a vector store called "CVs"
-    vector_store = client.beta.vector_stores.create(name="CVs")
     # Prepare the file for upload to OpenAI
     file_path = "converted/converted.txt"
     file_stream = open(file_path, "rb")
