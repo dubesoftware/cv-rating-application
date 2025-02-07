@@ -19,7 +19,7 @@ def index():
             # Get feedback from OpenAI
             feedback = get_openai_feedback(text)
             # Clean up resources
-            clean_up_resources()
+            clean_up_resources(file_path)
             # Display the results
-            return render_template('index.html', feedback=feedback)
+            return render_template('index.html', feedback=feedback["message"])
     return render_template('index.html')
