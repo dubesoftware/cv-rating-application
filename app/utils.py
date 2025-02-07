@@ -12,7 +12,7 @@ def convert_pdf_to_text(file_path):
     convertapi.api_credentials = os.environ.get('CONVERTAPI_SECRET')
     convertapi.convert('txt', {
         'File': file_path
-    }, from_format = 'pdf').save_files(os.path.join('uploads', 'converted.txt'))
+    }, from_format = 'pdf').save_files(os.path.join('converted', 'converted.txt'))
 
 def get_openai_feedback(text):
     # Create OpenAI assistant with file search enabled
@@ -27,13 +27,13 @@ def get_openai_feedback(text):
     vector_store = client.beta.vector_stores.create(name="CVs")
 
     # Prepare the file for upload to OpenAI
-    file_paths = ["uploads/converted.txt"]
-    file_streams = [open(path, "rb") for path in file_paths]
+    file_path = "converted/converted.txt"
+    file_stream = open(file_path, "rb")
 
     # Use the upload and poll SDK helper to upload the file, add it to the vector store,
     # and poll the status of the file for completion.
-    file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
-    vector_store_id=vector_store.id, files=file_streams
+    client.beta.vector_stores.file_batches.upload_and_poll(
+    vector_store_id=vector_store.id, files=file_stream
     )
 
     # Update the assistant to use the vector store
@@ -44,7 +44,7 @@ def get_openai_feedback(text):
 
     # Upload the user provided file to OpenAI
     message_file = client.files.create(
-        file=open("uploads/converted.txt", "rb"), purpose="assistants"
+        file=file_stream, purpose="assistants"
     )
 
     # Create a thread and attach the file to the message
@@ -62,6 +62,8 @@ def get_openai_feedback(text):
             }
         ]
     )
+    # Close the file stream
+    file_stream.close()
 
     # Create a Run and observe that the model uses the File Search tool to provide a response
     # to the user’s question
