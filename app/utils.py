@@ -72,3 +72,7 @@ def get_openai_feedback(text):
             cited_file = client.files.retrieve(file_citation.file_id)
             citations.append(f"[{index}] {cited_file.filename}")
     return message_content.value
+
+    def clean_up_resources():
+        # Stub clean up function to delete resources
+        pass
