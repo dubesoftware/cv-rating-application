@@ -3,6 +3,7 @@ import requests
 from app import app
 from flask import render_template, request, redirect, url_for
 from app.utils import convert_pdf_to_text, get_openai_feedback
+from werkzeug.utils import secure_filename
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -14,7 +15,7 @@ def index():
             return redirect(request.url)
         if file:
             # Save the file temporarily
-            file_path = os.path.join('uploads', file.filename)
+            file_path = os.path.join('uploads', secure_filename(file.filename))
             file.save(file_path)
             
             # Convert PDF to text
