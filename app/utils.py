@@ -1,5 +1,4 @@
 import os
-import requests
 import convertapi
 from openai import OpenAI
 
