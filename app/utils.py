@@ -47,7 +47,7 @@ def get_openai_feedback(text):
     )
     # Create a thread and attach the file to the message
     thread = client.beta.threads.create(
-    messages=[
+        messages=[
             {
                 "role": "user",
                 "content": "Review the attached CV and return a quality score out of " +
