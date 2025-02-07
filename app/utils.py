@@ -1,7 +1,6 @@
 import os
 import convertapi
 from openai import OpenAI
-
 # Instantiate OpenAI client
 client = OpenAI(api_key=os.environ.get('OPENAI_KEY'))
 
@@ -21,31 +20,25 @@ def get_openai_feedback(text):
         model="gpt-4o",
         tools=[{"type": "file_search"}],
     )
-
     # Create a vector store called "CVs"
     vector_store = client.beta.vector_stores.create(name="CVs")
-
     # Prepare the file for upload to OpenAI
     file_path = "converted/converted.txt"
     file_stream = open(file_path, "rb")
-
     # Use the upload and poll SDK helper to upload the file, add it to the vector store,
     # and poll the status of the file for completion.
     client.beta.vector_stores.file_batches.upload_and_poll(
     vector_store_id=vector_store.id, files=file_stream
     )
-
     # Update the assistant to use the vector store
     assistant = client.beta.assistants.update(
         assistant_id=assistant.id,
         tool_resources={"file_search": {"vector_store_ids": [vector_store.id]}},
     )
-
     # Upload the user provided file to OpenAI
     message_file = client.files.create(
         file=file_stream, purpose="assistants"
     )
-
     # Create a thread and attach the file to the message
     thread = client.beta.threads.create(
     messages=[
@@ -63,15 +56,12 @@ def get_openai_feedback(text):
     )
     # Close the file stream
     file_stream.close()
-
     # Create a Run and observe that the model uses the File Search tool to provide a response
     # to the user’s question
     run = client.beta.threads.runs.create_and_poll(
         thread_id=thread.id, assistant_id=assistant.id
     )
-
     messages = list(client.beta.threads.messages.list(thread_id=thread.id, run_id=run.id))
-
     message_content = messages[0].content[0].text
     annotations = message_content.annotations
     citations = []
@@ -80,5 +70,4 @@ def get_openai_feedback(text):
         if file_citation := getattr(annotation, "file_citation", None):
             cited_file = client.files.retrieve(file_citation.file_id)
             citations.append(f"[{index}] {cited_file.filename}")
-
     return message_content.value

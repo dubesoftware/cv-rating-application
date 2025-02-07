@@ -15,14 +15,11 @@ def index():
         if file:
             # Save the file temporarily
             file_path = os.path.join('uploads', secure_filename(file.filename))
-            file.save(file_path)
-            
+            file.save(file_path)            
             # Convert PDF to text
-            text = convert_pdf_to_text(file_path)
-            
+            text = convert_pdf_to_text(file_path)            
             # Get feedback from OpenAI
-            feedback = get_openai_feedback(text)
-            
+            feedback = get_openai_feedback(text)            
             # Display the results
             return render_template('index.html', feedback=feedback)
     return render_template('index.html')
