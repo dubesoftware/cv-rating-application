@@ -21,5 +21,5 @@ def index():
             # Clean up resources
             clean_up_resources(file_path)
             # Display the results
-            return render_template('index.html', feedback=feedback["message"])
+            return render_template('index.html', feedback=feedback)
     return render_template('index.html')
