@@ -28,7 +28,7 @@ def get_openai_feedback(text):
     # Use the upload and poll SDK helper to upload the file, add it to the vector store,
     # and poll the status of the file for completion.
     client.beta.vector_stores.file_batches.upload_and_poll(
-    vector_store_id=vector_store.id, files=file_stream
+        vector_store_id=vector_store.id, files=file_stream
     )
     # Update the assistant to use the vector store
     assistant = client.beta.assistants.update(
