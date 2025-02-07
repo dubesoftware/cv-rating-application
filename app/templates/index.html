@@ -6,8 +6,17 @@
     <title>CV Rating Application</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
-    <h1>CV Rating Application</h1>
+<body>    
+    <div class="logo">
+        <a href="{{ url_for('index') }}" class="logo-link">
+        <div class="logo-image">
+        </div>
+        <div class="logo-text">
+            <span class="logo-text-left">CV</span>
+            <span class="logo-text-right">Badger</span>
+        </div>
+        </a>
+    </div>
     <form method="POST" enctype="multipart/form-data">
         <input type="file" name="file" accept=".pdf">
         <button type="submit">Upload CV</button>
