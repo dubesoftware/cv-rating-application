@@ -10,6 +10,6 @@ This application is written in the Flask python web framework. To run it, perfor
 - From a terminal, enter a preferred working directory and clone the project's repository.
 - From the project's root directory' run the command `pip install -r requirements.txt`.
 - Once the dependencies are successfully installed, set up the ConvertAPI and OpenAI keys by adding them into your server's os.environ (environment variables). WARNING: Under *no* circumstances should credentials be shared in messages, emails, or checked in with source code as inline variables.
-- Still in the project root, create the folders `uploads`, `converted` and `reviews` to store uploaded PDF CVs, converted text documents and OpenAI response files respectively.
+- Still in the project root, create the folders `uploads` and `converted` to store uploaded PDF CVs, converted text documents and OpenAI response files respectively.
 - Run the project with the command `python run.py`. Note that the project is running in debug mode.
 - View the web interface at http://127.0.0.1:5000.
