@@ -83,4 +83,9 @@ def get_openai_feedback(text):
 
     def clean_up_resources(file_path):
         # Clean up uploaded CV PDF and converted .txt files
-        pass
+        file_paths = [
+            file_path,
+            "converted/converted.txt"
+        ]
+        list(map(delete_file, file_paths))
+        return True
