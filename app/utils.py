@@ -78,6 +78,9 @@ def get_openai_feedback(text):
             citations.append(f"[{index}] {cited_file.filename}")
     return message_content.value
 
-    def clean_up_resources():
-        # Stub clean up function to delete resources
-        pass
+    def clean_up_resources(file_path):
+        # Clean up uploaded CV PDF and converted .txt files
+        resource_paths = [
+            file_path,
+            os.path.join('converted', 'converted.txt')
+        ];

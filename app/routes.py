@@ -1,7 +1,7 @@
 import os
 from flask import render_template, request, redirect, url_for
 from . import app
-from app.utils import save_file, convert_pdf_to_text, get_openai_feedback
+from app.utils import save_file, convert_pdf_to_text, get_openai_feedback, clean_up_resources
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -18,6 +18,8 @@ def index():
             text = convert_pdf_to_text(file_path)
             # Get feedback from OpenAI
             feedback = get_openai_feedback(text)
+            # Clean up resources
+            clean_up_resources()
             # Display the results
             return render_template('index.html', feedback=feedback)
     return render_template('index.html')
