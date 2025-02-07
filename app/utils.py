@@ -82,4 +82,4 @@ def get_openai_feedback(text):
             cited_file = client.files.retrieve(file_citation.file_id)
             citations.append(f"[{index}] {cited_file.filename}")
 
-    print(message_content.value)
+    return message_content.value
