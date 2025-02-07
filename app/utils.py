@@ -1,14 +1,83 @@
 import os
 import requests
 import convertapi
+from openai import OpenAI
+
+# Instantiate OpenAI client
+client = OpenAI()
+
 
 def convert_pdf_to_text(file_path):
     # Use ConvertAPI to convert PDF to text
     convertapi.api_credentials = 'secret_lRQkjhj9nFEPNunH'
     convertapi.convert('txt', {
         'File': file_path
-    }, from_format = 'pdf').save_files(os.path.join('uploads', 'converted'))
+    }, from_format = 'pdf').save_files(os.path.join('uploads', 'converted.txt'))
 
 def get_openai_feedback(text):
-    # To do: Implement OpenAI API call
-    pass
+    # Create OpenAI assistant with file search enabled
+    assistant = client.beta.assistants.create(
+        name="CV Reviewer Assistant",
+        instructions="You are an expert CV reviewer. Use your knowledge of recruitment to provide feedback on a CV.",
+        model="gpt-4o",
+        tools=[{"type": "file_search"}],
+    )
+
+    # Create a vector store called "CVs"
+    vector_store = client.beta.vector_stores.create(name="CVs")
+
+    # Prepare the file for upload to OpenAI
+    file_paths = ["uploads/converted.txt"]
+    file_streams = [open(path, "rb") for path in file_paths]
+
+    # Use the upload and poll SDK helper to upload the file, add it to the vector store,
+    # and poll the status of the file for completion.
+    file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
+    vector_store_id=vector_store.id, files=file_streams
+    )
+
+    # Update the assistant to use the vector store
+    assistant = client.beta.assistants.update(
+        assistant_id=assistant.id,
+        tool_resources={"file_search": {"vector_store_ids": [vector_store.id]}},
+    )
+
+    # Upload the user provided file to OpenAI
+    message_file = client.files.create(
+        file=open("uploads/converted.txt", "rb"), purpose="assistants"
+    )
+
+    # Create a thread and attach the file to the message
+    thread = client.beta.threads.create(
+    messages=[
+            {
+                "role": "user",
+                "content": "Review the attached CV and return a quality score out of " +
+                "10, as well as a list of recommendations.",
+            
+                # Attach the file to the message.
+                "attachments": [
+                    { "file_id": message_file.id, "tools": [{"type": "file_search"}] }
+                ],
+            }
+        ]
+    )
+
+    # Create a Run and observe that the model uses the File Search tool to provide a response
+    # to the user’s question
+    run = client.beta.threads.runs.create_and_poll(
+        thread_id=thread.id, assistant_id=assistant.id
+    )
+
+    messages = list(client.beta.threads.messages.list(thread_id=thread.id, run_id=run.id))
+
+    message_content = messages[0].content[0].text
+    annotations = message_content.annotations
+    citations = []
+    for index, annotation in enumerate(annotations):
+        message_content.value = message_content.value.replace(annotation.text, f"[{index}]")
+        if file_citation := getattr(annotation, "file_citation", None):
+            cited_file = client.files.retrieve(file_citation.file_id)
+            citations.append(f"[{index}] {cited_file.filename}")
+
+    print(message_content.value)
